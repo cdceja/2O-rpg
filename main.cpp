@@ -7,8 +7,15 @@ int main() {
     Player *player = new Player("Victor", 100, 10, 5, 5);
     Enemy *enemy = new Enemy("Recursos Humanos", 50, 5, 2, 3);
 
-    player->doAttack(enemy);
-    enemy->doAttack(player);
+    cout<< player->toString()<< endl;
+    cout<< enemy->toString()<< endl;
+
+    while(true){
+	    player->doAttack(enemy);
+	    if(enemy->getHealth() < 0) break;
+	    enemy->doAttack(player);
+	    if(player->getHealth() < 0) break;
+    }
 
     cout<< player->toString()<< endl;
     cout<< enemy->toString()<< endl;
