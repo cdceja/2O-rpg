@@ -2,10 +2,36 @@
 // Created by Victor Navarro on 13/02/24.
 //
 #include "Character.h"
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+bool Character::compareSpeed(Character *a, Character *b){
+    return a->getSpeed() > b->getSpeed();
+}
+
+bool Character::flee(vector<Character*> participants) {
+    std::sort(participants.begin(), participants.end(), Character::compareSpeed);
+    Character* fastestCharacter = participants[0];
+    bool fleed = false;
+    if(this->getSpeed() > fastestCharacter->getSpeed()) {
+        fleed =  true;
+    }
+    else {
+        srand(time(NULL));
+        int chance = rand() % 100;
+        cout<< "chance: " << chance << endl;
+        fleed = chance > 99;
+    }
+
+    return fleed;
+}
 
 Character::Character(string _name, int _health, int _attack, int _defense, int _speed, bool _isPlayer) {
     name = _name;
     health = _health;
+    maxHealth = _health;
     attack = _attack;
     defense = _defense;
     speed = _speed;
@@ -26,6 +52,10 @@ void Character::setHealth(int _health) {
 
 int Character::getHealth() {
     return health;
+}
+
+int Character::getMaxHealth() {
+    return maxHealth;
 }
 
 void Character::setAttack(int _attack) {

@@ -7,7 +7,7 @@
 
 #include "../Character/Character.h"
 #include "../Enemy/Enemy.h"
-#include "./ActionResult.h"
+#include "../Combat/Action.h"
 
 class Enemy;
 
@@ -21,11 +21,10 @@ public:
     void takeDamage(int damage) override;
     Character* getTarget(vector<Enemy*> enemies);
 
-    bool flee(vector<Enemy*> enemies);
     void emote();
     void levelUp();
     void gainExperience(int);
-    ActionResult takeAction(vector<Enemy*> enemies);
+    Action takeAction(vector<Enemy*> enemies);
 };
 
 

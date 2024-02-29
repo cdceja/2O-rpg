@@ -8,9 +8,10 @@
 #include "../Character/Character.h"
 #include "../Player/Player.h"
 #include "../Enemy/Enemy.h"
-#include "../Player/ActionResult.h"
+#include "./Action.h"
 #include <vector>
 #include <string>
+#include <queue>
 
 using namespace std;
 
@@ -19,6 +20,8 @@ private:
     vector<Character*> participants;
     vector<Player*> teamMembers;
     vector<Enemy*> enemies;
+    priority_queue<Action> actions;
+
     void prepareCombat();
     Character* getTarget(Character* target);
 public:

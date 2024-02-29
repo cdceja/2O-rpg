@@ -3,14 +3,11 @@
 //
 #include "Player.h"
 #include <iostream>
+#include <algorithm>
 #include "../Utils.h"
 
 using namespace std;
 using namespace combat_utils;
-
-bool compareSpeed(Enemy *a, Enemy *b) {
-    return a->getSpeed() > b->getSpeed();
-}
 
 Player::Player(string name, int health, int attack, int defense, int speed) : Character(name, health, attack, defense, speed, true) {
     experience = 0;
@@ -32,23 +29,6 @@ void Player::takeDamage(int damage) {
     else {
         cout<<"You have taken " << damage << " damage" << endl;
     }
-}
-
-bool Player::flee(vector<Enemy*> enemies) {
-    std::sort(enemies.begin(), enemies.end(), compareSpeed);
-    Enemy* fastestEnemy = enemies[0];
-    bool fleed = false;
-    if(this->getSpeed() > fastestEnemy->getSpeed()) {
-        fleed =  true;
-    }
-    else {
-        srand(time(NULL));
-        int chance = rand() % 100;
-        cout<< "chance: " << chance << endl;
-        fleed = chance > 99;
-    }
-
-    return fleed;
 }
 
 void Player::emote() {
@@ -82,32 +62,47 @@ Character* Player::getTarget(vector<Enemy *> enemies) {
     return enemies[targetIndex];
 }
 
-ActionResult Player::takeAction(vector<Enemy*>enemies) {
+Action Player::takeAction(vector<Enemy*>enemies) {
     int option = 0;
     cout<<"Choose an action"<<endl;
     cout<<"1. Attack"<<endl;
     cout<<"2. Flee"<<endl;
+    cout<<"3. Stall"<<endl; // for testing purposes
     cin >> option;
     Character* target = nullptr;
     bool fleed = false;
+
+    Action myAction;
+    myAction.speed = getSpeed();
+
     switch(option) {
         case 1:
             target = getTarget(enemies);
-            doAttack(target);
+	    myAction.action = [this, target]() {
+                doAttack(target);
+	    };
             break;
-        case 2:
-            fleed = flee(enemies);
-            if(fleed) {
-                cout<<"You have fled"<<endl;
-            }
-            else {
-                cout<<"You couldn't flee"<<endl;
-            }
+	case 2:
+	    myAction.action = [this, enemies]() {
+    	        std::vector<Character*> characters (enemies.begin(), enemies.end());
+                bool fleed = flee(characters);
+                if(fleed) {
+                    cout<<"You have fled"<<endl;
+                }
+                else {
+                    cout<<"You couldn't flee"<<endl;
+                }
+	    };
             break;
+	case 3:
+	    myAction.action = [](){};
+	    break;
         default:
+	    // TODO ask again
             cout<<"Invalid option"<<endl;
+	    myAction.action = [](){};
             break;
     }
 
-    return ActionResult(target, fleed);
+    return myAction;
 }

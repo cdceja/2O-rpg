@@ -53,36 +53,22 @@ void Combat::doCombat() {
         vector<Character*>::iterator participant = participants.begin();
 
         while(participant != participants.end()) {
-            Character* target = nullptr;
-            if((*participant)->getIsPlayer()){
-                ActionResult playerAction = ((Player*)*participant)->takeAction(enemies);
-                if(playerAction.target && playerAction.target->getHealth() <= 0) {
-                    participant = participants.erase(remove(participants.begin(), participants.end(), playerAction.target), participants.end());
-                    enemies.erase(remove(enemies.begin(), enemies.end(), playerAction.target), enemies.end());
-                } else if (playerAction.fleed) {
-                    return;
-                } else {
-                    participant++;
-                }
-            }
-            else {
-                //TODO: Hacer refactor de esta seccion del codigo para usar el metodo takeAction
-                target = ((Enemy*)*participant)->getTarget(teamMembers);
-                (*participant)->doAttack(target);
-                if(target->getHealth() <= 0) {
-                    participant = participants.erase(remove(participants.begin(), participants.end(), target), participants.end());
-                    if(target->getIsPlayer()) {
-                        teamMembers.erase(remove(teamMembers.begin(), teamMembers.end(), target), teamMembers.end());
-                    }
-                    else {
-                        enemies.erase(remove(enemies.begin(), enemies.end(), target), enemies.end());
-                    }
-                } else {
-                    participant++;
-                }
-            }
+	    Character* target = nullptr;
+	    Action currentAction;
+	    if((*participant)->getIsPlayer()) {
+		    currentAction = ((Player*)*participant)->takeAction(enemies);
+	    } else {
+		    currentAction = ((Enemy*)*participant)->takeAction(teamMembers);
+	    }
+	    actions.push(currentAction);
 
+	    participant++;
         }
+	while(!actions.empty()){
+	    Action currentAction = actions.top();
+	    currentAction.action();
+	    actions.pop();
+	}
     }
 
     //No se imprime el nombre del ganador

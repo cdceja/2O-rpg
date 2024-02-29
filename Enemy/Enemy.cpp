@@ -3,7 +3,7 @@
 //
 #include "Enemy.h"
 #include <iostream>
-
+#include <climits>
 
 using namespace std;
 
@@ -44,5 +44,33 @@ Character* Enemy::getTarget(vector<Player *> teamMembers) {
     }
 
     return teamMembers[targetIndex];
+}
+
+Action Enemy::takeAction(vector<Player*> teamMembers) {
+    Action myAction;
+    myAction.speed = getSpeed();
+    Character* target = nullptr;
+
+    if (getHealth() < 0.15 * getMaxHealth()) {
+	if (rand() % 100 < 5) {
+	    myAction.action = [this, teamMembers](){
+		    vector<Character*> participants (teamMembers.begin(), teamMembers.end());
+		    bool fleed = flee(participants);
+		    if(fleed) {
+			cout<<"Enemy has fled"<<endl;
+		    }
+		    else {
+			cout<<"Enemy tried to flee but couldn't"<<endl;
+		    }
+	    };
+	}
+    }
+    if (myAction.action == nullptr){
+        target = getTarget(teamMembers);
+        myAction.action = [this, target](){
+            doAttack(target);
+        };
+    }
+    return myAction;
 }
 
