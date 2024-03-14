@@ -14,7 +14,7 @@ bool Character::compareSpeed(Character *a, Character *b){
 bool Character::flee(vector<Character*> participants) {
     std::sort(participants.begin(), participants.end(), Character::compareSpeed);
     Character* fastestCharacter = participants[0];
-    bool fleed = false;
+    fleed = false;
     if(this->getSpeed() > fastestCharacter->getSpeed()) {
         fleed =  true;
     }
@@ -22,6 +22,8 @@ bool Character::flee(vector<Character*> participants) {
         srand(time(NULL));
         int chance = rand() % 100;
         cout<< "chance: " << chance << endl;
+	// TODO Doesn't this mean that they'll always fail to flee?
+	// Because chance is 0-99
         fleed = chance > 99;
     }
 
@@ -36,6 +38,7 @@ Character::Character(string _name, int _health, int _attack, int _defense, int _
     defense = _defense;
     speed = _speed;
     isPlayer = _isPlayer;
+    fleed = false;
 }
 
 void Character::setName(string _name) {
@@ -88,4 +91,8 @@ string Character::toString() {
 
 bool Character::getIsPlayer() {
     return isPlayer;
+}
+
+bool Character::hasFleed() {
+    return fleed;
 }

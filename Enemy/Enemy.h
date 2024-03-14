@@ -8,6 +8,7 @@
 #include "../Player/Player.h"
 #include "../Combat/Action.h"
 
+struct Action;
 class Player;
 
 class Enemy: public Character {

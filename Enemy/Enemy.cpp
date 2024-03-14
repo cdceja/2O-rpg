@@ -7,7 +7,6 @@
 
 using namespace std;
 
-//TODO: Check the circular dependency
 int getRolledAttack(int attack) {
     int lowerLimit = attack * .80;
     return (rand() % (attack - lowerLimit)) + lowerLimit;
@@ -49,24 +48,20 @@ Character* Enemy::getTarget(vector<Player *> teamMembers) {
 Action Enemy::takeAction(vector<Player*> teamMembers) {
     Action myAction;
     myAction.speed = getSpeed();
+    myAction.subscriber = this;
     Character* target = nullptr;
 
-    if (getHealth() < 0.15 * getMaxHealth()) {
-	if (rand() % 100 < 5) {
-	    myAction.action = [this, teamMembers](){
-		    vector<Character*> participants (teamMembers.begin(), teamMembers.end());
-		    bool fleed = flee(participants);
-		    if(fleed) {
-			cout<<"Enemy has fled"<<endl;
-		    }
-		    else {
-			cout<<"Enemy tried to flee but couldn't"<<endl;
-		    }
-	    };
-	}
-    }
-    if (myAction.action == nullptr){
+    // Am I dying? Shall I run away right now?
+    if (getHealth() < 0.15 * getMaxHealth() && rand() % 100 < 5) {
+	// Yes, try to flee
+        myAction.action = [this, teamMembers](){
+    	    vector<Character*> participants (teamMembers.begin(), teamMembers.end());
+    	    flee(participants);
+        };
+    } else {
+	// No, attack
         target = getTarget(teamMembers);
+	myAction.target = target;
         myAction.action = [this, target](){
             doAttack(target);
         };

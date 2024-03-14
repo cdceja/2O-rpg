@@ -5,7 +5,7 @@
 #ifndef RPG_CHARACTER_H
 #define RPG_CHARACTER_H
 #include<string>
-#include<vector>
+#include "../Combat/Action.h"
 
 using namespace std;
 
@@ -18,6 +18,7 @@ protected:
     int defense;
     int speed;
     bool isPlayer;
+    bool fleed;
 
 public:
     Character(string, int, int, int, int, bool);
@@ -40,6 +41,7 @@ public:
     int getSpeed();
     string toString();
     bool getIsPlayer();
+    bool hasFleed();
 };
 
 

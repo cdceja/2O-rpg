@@ -2,12 +2,14 @@
 #include "Enemy/Enemy.h"
 #include "Player/Player.h"
 #include "Combat/Combat.h"
+#include <queue>
+
+using namespace std;
 
 int main() {
-
-    Player *player = new Player("Victor", 20, 2, 3, 1);
+    Player *player = new Player("Victor", 30, 8, 2, 10);
     Enemy *enemy = new Enemy("Goblin", 20, 5, 3, 7);
-    Enemy *enemy2 = new Enemy("Orc", 30, 8, 5, 2);
+    Enemy *enemy2 = new Enemy("Orc", 30, 4, 2, 2);
 
     vector<Character*> participants;
     participants.push_back(player);
@@ -21,5 +23,6 @@ int main() {
     delete enemy;
     delete enemy2;
     delete combat;
+
     return 0;
 }

@@ -49,26 +49,10 @@ void Combat::prepareCombat() {
 void Combat::doCombat() {
     prepareCombat();
 
+    //Este while es 1 iteracion por ronda
     while(enemies.size() != 0 && teamMembers.size() != 0) {
-        vector<Character*>::iterator participant = participants.begin();
-
-        while(participant != participants.end()) {
-	    Character* target = nullptr;
-	    Action currentAction;
-	    if((*participant)->getIsPlayer()) {
-		    currentAction = ((Player*)*participant)->takeAction(enemies);
-	    } else {
-		    currentAction = ((Enemy*)*participant)->takeAction(teamMembers);
-	    }
-	    actions.push(currentAction);
-
-	    participant++;
-        }
-	while(!actions.empty()){
-	    Action currentAction = actions.top();
-	    currentAction.action();
-	    actions.pop();
-	}
+        registerActions();
+        executeActions();
     }
 
     //No se imprime el nombre del ganador
@@ -77,6 +61,70 @@ void Combat::doCombat() {
     }
     else {
         cout<<"The enemies have won the combat - Game Over"<<endl;
+    }
+}
+
+void Combat::registerActions() {
+    vector<Character*>::iterator participant = participants.begin();
+    //Una iteracion por turno de cada participante (player y enemigo)
+    while(participant != participants.end()) {
+        Character* target = nullptr;
+        Action currentAction;
+        if((*participant)->getIsPlayer()) {
+            currentAction = ((Player*)*participant)->takeAction(enemies);
+        }
+        else {
+            currentAction = ((Enemy*)*participant)->takeAction(teamMembers);
+        }
+        actions.push(currentAction);
+        participant++;
+    }
+}
+
+void Combat::executeActions() {
+    //Aqui se ejecutan las acciones
+    while(!actions.empty()) {
+        Action currentAction = actions.top();
+        actions.pop();
+	// Check if attack target is still in combat (to prevent being hit after fleeing)
+	// Also check if attack subscriber is still alive (to prevent it from hitting if it was defeated already)
+	// TODO find a way to filter actions' priority queue or change container to something iterable
+	// because this is slow
+	if (find(participants.begin(), participants.end(), currentAction.target) == participants.end()
+	 || find(participants.begin(), participants.end(), currentAction.subscriber) == participants.end())
+		continue;
+
+        currentAction.action();
+        checkForFlee(currentAction.subscriber);
+        checkParticipantStatus(currentAction.subscriber);
+        checkParticipantStatus(currentAction.target);
+    }
+}
+
+void Combat::checkParticipantStatus(Character* participant) {
+    if(participant->getHealth() <= 0) {
+        if(participant->getIsPlayer()) {
+            teamMembers.erase(remove(teamMembers.begin(), teamMembers.end(), participant), teamMembers.end());
+        }
+        else {
+            enemies.erase(remove(enemies.begin(), enemies.end(), participant), enemies.end());
+        }
+        participants.erase(remove(participants.begin(), participants.end(), participant), participants.end());
+    }
+}
+
+void Combat::checkForFlee(Character *character) {
+    bool fleed = character->hasFleed();
+    if(fleed) {
+        if(character->getIsPlayer()) {
+            cout<<"You have fled the combat"<<endl;
+            teamMembers.erase(remove(teamMembers.begin(), teamMembers.end(), character), teamMembers.end());
+        }
+        else {
+            cout<<character->getName()<<" has fled the combat"<<endl;
+            enemies.erase(remove(enemies.begin(), enemies.end(), character), enemies.end());
+        }
+        participants.erase(remove(participants.begin(), participants.end(), character), participants.end());
     }
 }
 
