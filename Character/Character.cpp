@@ -4,6 +4,7 @@
 #include "Character.h"
 #include <algorithm>
 #include <iostream>
+#include <cstring>
 
 using namespace std;
 
@@ -30,8 +31,8 @@ bool Character::flee(vector<Character*> participants) {
     return fleed;
 }
 
-Character::Character(string _name, int _health, int _attack, int _defense, int _speed, bool _isPlayer) {
-    name = _name;
+Character::Character(const char * _name, int _health, int _attack, int _defense, int _speed, bool _isPlayer) {
+    setName(_name);
     health = _health;
     maxHealth = _health;
     attack = _attack;
@@ -41,11 +42,11 @@ Character::Character(string _name, int _health, int _attack, int _defense, int _
     fleed = false;
 }
 
-void Character::setName(string _name) {
-    name = _name;
+void Character::setName(const char * _name) {
+    strncpy(name, _name, 30);
 }
 
-string Character::getName() {
+const char * Character::getName() {
     return name;
 }
 
@@ -86,7 +87,7 @@ int Character::getSpeed() {
 }
 
 string Character::toString() {
-    return "Name: " + name + "\nHealth: " + to_string(health) + "\nAttack: " + to_string(attack) + "\nDefense: " + to_string(defense) + "\nSpeed: " + to_string(speed);
+    return "Name: " + string(name) + "\nHealth: " + to_string(health) + "\nAttack: " + to_string(attack) + "\nDefense: " + to_string(defense) + "\nSpeed: " + to_string(speed);
 }
 
 bool Character::getIsPlayer() {

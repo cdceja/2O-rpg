@@ -11,7 +11,7 @@ using namespace std;
 
 class Character {
 protected:
-    string name;
+    char name[30];
     int health;
     int maxHealth;
     int attack;
@@ -21,15 +21,15 @@ protected:
     bool fleed;
 
 public:
-    Character(string, int, int, int, int, bool);
+    Character(const char *, int, int, int, int, bool);
 
     static bool compareSpeed(Character *a, Character *b);
     virtual void doAttack(Character *target) = 0;
     virtual void takeDamage(int damage) = 0;
     bool flee(vector<Character*> participants);
 
-    void setName(string);
-    string getName();
+    void setName(const char *);
+    const char * getName();
     void setHealth(int);
     int getHealth();
     int getMaxHealth();

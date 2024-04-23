@@ -9,7 +9,7 @@
 using namespace std;
 using namespace combat_utils;
 
-Player::Player(string name, int health, int attack, int defense, int speed) : Character(name, health, attack, defense, speed, true) {
+Player::Player(const char * name, int health, int attack, int defense, int speed) : Character(name, health, attack, defense, speed, true) {
     experience = 0;
     level = 1;
 }
