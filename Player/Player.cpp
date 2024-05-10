@@ -44,10 +44,37 @@ void Player::emote() {
 
 void Player::levelUp() {
     level++;
-    setHealth(getHealth() + 10);
-    setAttack(getAttack() + 5);
-    setDefense(getDefense() + 5);
-    setSpeed(getSpeed() + 5);
+	setMaxHealth(getMaxHealth() + 5);
+    setHealth(getHealth() + 5);
+
+	int awardedPoints = 5, atk = 0, def = 0, spd = 0;
+	char opt;
+	do{
+		cout << "Choose stats to improve (up to " << awardedPoints << " point" << (awardedPoints == 1? "":"s") << " available):\n";
+		cout << "1. Attack" << (atk?" (+" + to_string(atk) + ")":"") << "\n";
+		cout << "2. Defense" << (def?" (+" + to_string(def) + ")":"") << "\n";
+		cout << "3. Speed" << (spd?" (+" + to_string(spd) + ")":"") << "\n";
+		cin >> opt;
+		switch (opt){
+			case '1':
+				atk++;
+				awardedPoints--;
+				break;
+			case '2':
+				def++;
+				awardedPoints--;
+				break;
+			case '3':
+				spd++;
+				awardedPoints--;
+				break;
+			default:
+				cout << "Invalid option\n\n";
+		}
+	} while(awardedPoints);
+	setAttack(getAttack() + atk);
+	setDefense(getDefense() + def);
+	setSpeed(getSpeed() + spd);
 }
 
 void Player::gainExperience(int exp) {

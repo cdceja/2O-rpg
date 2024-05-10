@@ -51,11 +51,15 @@ const char * Character::getName() {
 }
 
 void Character::setHealth(int _health) {
-    health = _health;
+    health = min(_health, maxHealth);
 }
 
 int Character::getHealth() {
     return health;
+}
+
+void Character::setMaxHealth(int _maxHealth) {
+    maxHealth = _maxHealth;
 }
 
 int Character::getMaxHealth() {

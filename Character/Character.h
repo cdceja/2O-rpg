@@ -32,6 +32,7 @@ public:
     const char * getName();
     void setHealth(int);
     int getHealth();
+    void setMaxHealth(int);
     int getMaxHealth();
     void setAttack(int);
     int getAttack();
