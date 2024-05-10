@@ -12,7 +12,20 @@ int getRolledAttack(int attack) {
     return (rand() % (attack - lowerLimit)) + lowerLimit;
 }
 
-Enemy::Enemy(const char * name, int health, int attack, int defense, int speed) : Character(name, health, attack, defense, speed, false) {
+Enemy::Enemy(const char * name, int health, int attack, int defense, int speed, int _expReward) : Character(name, health, attack, defense, speed, false) {
+	expReward = _expReward;
+}
+
+int Enemy::getExpReward(){
+    return expReward;
+}
+
+void Enemy::setExpReward(int _expReward){
+	expReward = _expReward;
+}
+
+string Enemy::toString() {
+    return "Name: " + string(name) + "\nHealth: " + to_string(health) + "\nAttack: " + to_string(attack) + "\nDefense: " + to_string(defense) + "\nSpeed: " + to_string(speed) + "\nExpReward: " + to_string(expReward) + "\n";
 }
 
 void Enemy::doAttack(Character *target) {

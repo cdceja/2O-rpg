@@ -39,7 +39,7 @@ public:
     int getDefense();
     void setSpeed(int);
     int getSpeed();
-    string toString();
+    virtual string toString();
     bool getIsPlayer();
     bool hasFleed();
 };

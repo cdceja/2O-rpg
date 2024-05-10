@@ -12,12 +12,17 @@ struct Action;
 class Player;
 
 class Enemy: public Character {
+private:
+    int expReward;
 public:
-    Enemy(const char *, int, int, int, int);
+    Enemy(const char *, int, int, int, int, int);
     void doAttack(Character *target) override;
     void takeDamage(int damage) override;
     Character* getTarget(vector<Player*> teamMembers);
     Action takeAction(vector<Player*> teamMembers);
+    int getExpReward();
+    void setExpReward(int);
+	string toString() override;
 };
 
 
