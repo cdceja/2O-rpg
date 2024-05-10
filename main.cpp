@@ -8,7 +8,7 @@ using namespace std;
 
 int main() {
     Player *player = new Player("Victor", 30, 100, 2, 10);
-    Enemy *enemy = new Enemy("Goblin", 20, 5, 3, 7, 25);
+    Enemy *enemy = new Enemy("Goblin", 20, 5, 3, 7, 35);
 	Enemy *enemy2 = new Enemy("Orc", 30, 4, 2, 2, 25);
 
     vector<Character*> participants;
