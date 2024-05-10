@@ -8,11 +8,14 @@
 #include "../Character/Character.h"
 #include "../Enemy/Enemy.h"
 #include "../Combat/Action.h"
+#include "../Observer/ISubject.h"
+#include <list>
 
 struct Action;
 class Enemy;
+class ISubject;
 
-class Player: public Character {
+class Player: public Character, public ISubject {
 protected:
     int experience;
     int level;
@@ -20,6 +23,10 @@ protected:
 public:
     Player(const char* _name, int _health, int _attack, int _defense, int _speed);
     Player(const char* _name, int _health, int _attack, int _defense, int _speed, bool _isPlayer, int _experience, int _level);
+
+	void Attach(IObserver*) override;
+	void Detach(IObserver*) override;
+	void Notify(std::string) override;
 
 	string toString() override;
     void doAttack(Character *target) override;
@@ -40,6 +47,7 @@ public:
 
 private:
     char buffer[Player::BUFFER_SIZE];
+	vector<IObserver *> enemiesWatching;
 };
 
 

@@ -20,6 +20,21 @@ Player::Player(const char* _name, int _health, int _attack, int _defense, int _s
     level = _level;
 }
 
+void Player::Attach(IObserver *observer) {
+	enemiesWatching.push_back(observer);
+}
+
+void Player::Detach(IObserver *observer) {
+	enemiesWatching.erase(std::remove(enemiesWatching.begin(), enemiesWatching.end(), observer), enemiesWatching.end());
+}
+
+void Player::Notify(std::string message) {
+	vector<IObserver *>::iterator iterator = enemiesWatching.begin();
+	for (;iterator != enemiesWatching.end();iterator++) {
+		(*iterator)->Update(message);
+	}
+}
+
 string Player::toString() {
 	return "Name: " + string(name) + "\nHealth: " + to_string(health) + "\nAttack: " + to_string(attack) + "\nDefense: " + to_string(defense) + "\nSpeed: " + to_string(speed) + "\nLevel: " + to_string(level) + "\nExperience: " + to_string(experience) + "\n";
 }
@@ -47,10 +62,11 @@ void Player::levelUp() {
 	setMaxHealth(getMaxHealth() + 5);
     setHealth(getHealth() + 5);
 
-	int awardedPoints = 5, atk = 0, def = 0, spd = 0;
+	const int awardedPts = 5;
+	int ptsToAward = awardedPts, atk = 0, def = 0, spd = 0;
 	char opt;
 	do{
-		cout << "Choose stats to improve (up to " << awardedPoints << " point" << (awardedPoints == 1? "":"s") << " available):\n";
+		cout << "Choose stats to improve (up to " << ptsToAward << " point" << (ptsToAward == 1? "":"s") << " available):\n";
 		cout << "1. Attack" << (atk?" (+" + to_string(atk) + ")":"") << "\n";
 		cout << "2. Defense" << (def?" (+" + to_string(def) + ")":"") << "\n";
 		cout << "3. Speed" << (spd?" (+" + to_string(spd) + ")":"") << "\n";
@@ -58,23 +74,28 @@ void Player::levelUp() {
 		switch (opt){
 			case '1':
 				atk++;
-				awardedPoints--;
+				ptsToAward--;
 				break;
 			case '2':
 				def++;
-				awardedPoints--;
+				ptsToAward--;
 				break;
 			case '3':
 				spd++;
-				awardedPoints--;
+				ptsToAward--;
 				break;
 			default:
 				cout << "Invalid option\n\n";
 		}
-	} while(awardedPoints);
+	} while(ptsToAward);
 	setAttack(getAttack() + atk);
 	setDefense(getDefense() + def);
 	setSpeed(getSpeed() + spd);
+
+	Notify("LVLUP " + to_string(level) + " " + to_string(awardedPts));
+
+	// TODO disable debug info
+	cout << toString();
 }
 
 void Player::gainExperience(int exp) {
