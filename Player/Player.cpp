@@ -4,6 +4,7 @@
 #include "Player.h"
 #include <iostream>
 #include <algorithm>
+#include <cstring>
 #include "../Utils.h"
 
 using namespace std;
@@ -18,7 +19,6 @@ Player::Player(const char* _name, int _health, int _attack, int _defense, int _s
     experience = _experience;
     level = _level;
 }
-
 
 void Player::doAttack(Character *target) {
     int rolledAttack = getRolledAttack(getAttack());
@@ -111,6 +111,7 @@ Action Player::takeAction(vector<Enemy*>enemies) {
 
     return myAction;
 }
+
 char* Player::serialize() {
     char* iterator = buffer;
 

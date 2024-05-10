@@ -18,15 +18,15 @@ protected:
     int level;
 
 public:
-    Player(const char * _name, int _health, int _attack, int _defense, int _speed);
-    Player(const char * _name, int _health, int _attack, int _defense, int _speed, bool _isPlayer, int _experience, int _level);
+    Player(const char* _name, int _health, int _attack, int _defense, int _speed);
+    Player(const char* _name, int _health, int _attack, int _defense, int _speed, bool _isPlayer, int _experience, int _level);
 
     void doAttack(Character *target) override;
     void takeDamage(int damage) override;
     char* serialize();
     static const unsigned int BUFFER_SIZE = sizeof (name) + sizeof(health) + sizeof(attack) + sizeof(defense) + sizeof(speed) + sizeof(isPlayer) + sizeof(level) + sizeof(experience);
 
-    static Player* unserialize(char* buffer);
+    static Player* deserialize(char* buffer);
 
     Character* getTarget(vector<Enemy*> enemies);
 
