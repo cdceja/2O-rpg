@@ -108,6 +108,10 @@ void Combat::checkParticipantStatus(Character* participant) {
         }
         else {
             enemies.erase(remove(enemies.begin(), enemies.end(), participant), enemies.end());
+			int expReward = ((Enemy*)participant)->getExpReward();
+			for(auto player : teamMembers){
+				player->gainExperience(expReward);
+			}
         }
         participants.erase(remove(participants.begin(), participants.end(), participant), participants.end());
     }

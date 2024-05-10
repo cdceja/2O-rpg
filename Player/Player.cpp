@@ -20,6 +20,10 @@ Player::Player(const char* _name, int _health, int _attack, int _defense, int _s
     level = _level;
 }
 
+string Player::toString() {
+	return "Name: " + string(name) + "\nHealth: " + to_string(health) + "\nAttack: " + to_string(attack) + "\nDefense: " + to_string(defense) + "\nSpeed: " + to_string(speed) + "\nLevel: " + to_string(level) + "\nExperience: " + to_string(experience) + "\n";
+}
+
 void Player::doAttack(Character *target) {
     int rolledAttack = getRolledAttack(getAttack());
     int trueDamage = target->getDefense() > rolledAttack ? 0 : rolledAttack - target->getDefense();

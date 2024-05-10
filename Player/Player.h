@@ -21,6 +21,7 @@ public:
     Player(const char* _name, int _health, int _attack, int _defense, int _speed);
     Player(const char* _name, int _health, int _attack, int _defense, int _speed, bool _isPlayer, int _experience, int _level);
 
+	string toString() override;
     void doAttack(Character *target) override;
     void takeDamage(int damage) override;
     char* serialize();
