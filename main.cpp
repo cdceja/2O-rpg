@@ -21,7 +21,7 @@ int main() {
 
     char* buffer = player->serialize();
 
-    Player* ooootroPlayer = Player::unserialize(buffer);
+    Player* ooootroPlayer = Player::deserialize(buffer);
 
     delete player;
     delete enemy;
