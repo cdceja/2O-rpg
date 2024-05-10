@@ -53,8 +53,9 @@ void Player::levelUp() {
 void Player::gainExperience(int exp) {
     experience += exp;
     if (experience >= 100) {
-        levelUp();
-        experience = 0;
+		for (int i=0; i < experience/100; i++)
+        	levelUp();
+        experience %= 100;
     }
 }
 
